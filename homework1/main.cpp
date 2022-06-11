@@ -4,6 +4,14 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "Shader.h"
+
+float vertices[] = {
+	-0.5f, -0.5f, 0.0f,
+	 0.5f, -0.5f, 0.0f,
+	 0.0f,  0.5f, 0.0f
+};
+
 void processInput(GLFWwindow* window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
@@ -44,13 +52,35 @@ int main()
 	// show window
 	glViewport(0, 0, 800, 600);
 
+	// load model to VAO & VBO
+	unsigned int VAO;
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
+
+	unsigned int VBO;
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	Shader* shader = new Shader(GL_FRAGMENT_SHADER, "pure_color.frag");
+
 	while (!glfwWindowShouldClose(window)) {
 		// process input
 		processInput(window);
 
 		// clear screen
-		glClearColor(1.0f, 0, 0, 1.0f);
+		glClearColor(0.3f, 0.2f, 0.8f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		glBindVertexArray(VAO);
+		// draw triangle
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		// use shader program
+		shader->use();
 
 		glfwPollEvents();
 		glfwSwapBuffers(window);
