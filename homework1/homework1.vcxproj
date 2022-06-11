@@ -145,6 +145,7 @@
     <ClCompile Include="Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="gradient.frag" />
     <None Include="packages.config" />
     <None Include="pure_color.frag" />
     <None Include="vertexSource.vert" />

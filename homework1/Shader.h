@@ -8,15 +8,16 @@
 
 class Shader
 {
-private:
+public:
 	GLenum shaderType;
 	std::string fileSourceString;
 	const char* fileSource;
+	unsigned int shaderID;
 	unsigned int ID;
 
+	Shader(GLenum type, const char* filePath);
 	void checkShaderCompile();
 	void checkProgramLink();
-public:
-	Shader(GLenum type, const char* filePath);
 	void use();
+	void deleteShader();
 };

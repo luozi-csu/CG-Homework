@@ -27,7 +27,6 @@ Shader::Shader(GLenum type, const char* filePath)
 		// load shader file source, std::string to const char pointer
 		fileSource = fileSourceString.c_str();
 
-		unsigned int shaderID;
 		shaderID = glCreateShader(shaderType);
 		glShaderSource(shaderID, 1, &fileSource, NULL);
 		glCompileShader(shaderID);
@@ -51,8 +50,6 @@ Shader::Shader(GLenum type, const char* filePath)
 		if (!linked) {
 			throw std::exception("link program failed");
 		}
-
-		glDeleteShader(shaderID);
 	}
 	catch (const std::exception& ex)
 	{
@@ -63,4 +60,9 @@ Shader::Shader(GLenum type, const char* filePath)
 void Shader::use()
 {
 	glUseProgram(ID);
+}
+
+void Shader::deleteShader()
+{
+	glDeleteShader(shaderID);
 }

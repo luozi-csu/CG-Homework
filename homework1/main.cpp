@@ -6,6 +6,9 @@
 
 #include "Shader.h"
 
+//#define PURE_COLOR
+#define GRADIENT
+
 float vertices[] = {
 	-0.5f, -0.5f, 0.0f,
 	 0.5f, -0.5f, 0.0f,
@@ -65,7 +68,8 @@ int main()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	Shader* shader = new Shader(GL_FRAGMENT_SHADER, "pure_color.frag");
+	Shader* vertexShader = new Shader(GL_VERTEX_SHADER, "vertexSource.vert");
+	Shader* fragmentShader = NULL;
 
 	while (!glfwWindowShouldClose(window)) {
 		// process input
@@ -75,15 +79,42 @@ int main()
 		glClearColor(0.3f, 0.2f, 0.8f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+#ifdef PURE_COLOR
+		fragmentShader = new Shader(GL_FRAGMENT_SHADER, "pure_color.frag");
+		fragmentShader->use();
+		fragmentShader->deleteShader();
+#endif
+
+#ifdef GRADIENT
+		fragmentShader = new Shader(GL_FRAGMENT_SHADER, "gradient.frag");
+		unsigned int program = glCreateProgram();
+		glAttachShader(program, vertexShader->shaderID);
+		glAttachShader(program, fragmentShader->shaderID);
+		glLinkProgram(program);
+
+		// check program link status
+		int linked;
+		glGetProgramiv(program, GL_LINK_STATUS, &linked);
+
+		if (!linked) {
+			std::cout << "link program failed" << std::endl;
+			return -1;
+		}
+
+		glUseProgram(program);
+		fragmentShader->deleteShader();
+#endif
+
 		glBindVertexArray(VAO);
 		// draw triangle
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
-		// use shader program
-		shader->use();
-
 		glfwPollEvents();
 		glfwSwapBuffers(window);
+
+		// deallocate memory
+		glDeleteProgram(program);
+		delete fragmentShader;
 	}
 
 	glfwTerminate();

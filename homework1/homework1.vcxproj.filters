@@ -30,6 +30,9 @@
     <None Include="vertexSource.vert">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="gradient.frag">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
