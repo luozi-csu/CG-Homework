@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 #define GLEW_STATIC
 #include <GL/glew.h>
@@ -6,8 +7,7 @@
 
 #include "Shader.h"
 
-//#define PURE_COLOR
-#define GRADIENT
+#define INDEX 4
 
 float vertices[] = {
 	-0.5f, -0.5f, 0.0f,
@@ -68,8 +68,30 @@ int main()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
+	std::vector<const char*> fragmentSourceList = { 
+		"pure_color.frag", 
+		"gradient.frag", 
+		"trisection.frag",
+		"stripe.frag",
+		"circle.frag"
+	};
+
 	Shader* vertexShader = new Shader(GL_VERTEX_SHADER, "vertexSource.vert");
-	Shader* fragmentShader = NULL;
+	Shader* fragmentShader = new Shader(GL_FRAGMENT_SHADER, fragmentSourceList[INDEX]);
+
+	unsigned int program = glCreateProgram();
+	glAttachShader(program, vertexShader->shaderID);
+	glAttachShader(program, fragmentShader->shaderID);
+	glLinkProgram(program);
+
+	// check program link status
+	int linked;
+	glGetProgramiv(program, GL_LINK_STATUS, &linked);
+
+	if (!linked) {
+		std::cout << "link program failed" << std::endl;
+		return -1;
+	}
 
 	while (!glfwWindowShouldClose(window)) {
 		// process input
@@ -79,31 +101,7 @@ int main()
 		glClearColor(0.3f, 0.2f, 0.8f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-#ifdef PURE_COLOR
-		fragmentShader = new Shader(GL_FRAGMENT_SHADER, "pure_color.frag");
-		fragmentShader->use();
-		fragmentShader->deleteShader();
-#endif
-
-#ifdef GRADIENT
-		fragmentShader = new Shader(GL_FRAGMENT_SHADER, "gradient.frag");
-		unsigned int program = glCreateProgram();
-		glAttachShader(program, vertexShader->shaderID);
-		glAttachShader(program, fragmentShader->shaderID);
-		glLinkProgram(program);
-
-		// check program link status
-		int linked;
-		glGetProgramiv(program, GL_LINK_STATUS, &linked);
-
-		if (!linked) {
-			std::cout << "link program failed" << std::endl;
-			return -1;
-		}
-
 		glUseProgram(program);
-		fragmentShader->deleteShader();
-#endif
 
 		glBindVertexArray(VAO);
 		// draw triangle
@@ -111,11 +109,12 @@ int main()
 
 		glfwPollEvents();
 		glfwSwapBuffers(window);
-
-		// deallocate memory
-		glDeleteProgram(program);
-		delete fragmentShader;
 	}
+
+	// deallocate memory
+	vertexShader->deleteShader();
+	fragmentShader->deleteShader();
+	glDeleteProgram(program);
 
 	glfwTerminate();
 	return 0;

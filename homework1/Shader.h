@@ -16,8 +16,5 @@ public:
 	unsigned int ID;
 
 	Shader(GLenum type, const char* filePath);
-	void checkShaderCompile();
-	void checkProgramLink();
-	void use();
 	void deleteShader();
 };

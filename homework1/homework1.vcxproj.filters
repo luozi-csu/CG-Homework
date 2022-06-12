@@ -27,10 +27,19 @@
     <None Include="pure_color.frag">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="gradient.frag">
+      <Filter>资源文件</Filter>
+    </None>
     <None Include="vertexSource.vert">
       <Filter>资源文件</Filter>
     </None>
-    <None Include="gradient.frag">
+    <None Include="trisection.frag">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="stripe.frag">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="circle.frag">
       <Filter>资源文件</Filter>
     </None>
   </ItemGroup>

@@ -57,11 +57,6 @@ Shader::Shader(GLenum type, const char* filePath)
 	}
 }
 
-void Shader::use()
-{
-	glUseProgram(ID);
-}
-
 void Shader::deleteShader()
 {
 	glDeleteShader(shaderID);

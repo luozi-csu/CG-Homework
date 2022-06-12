@@ -1,2 +1,13 @@
 ﻿  main.cpp
+LINK : warning LNK4098: 默认库“LIBCMTD”与其他库的使用冲突；请使用 /NODEFAULTLIB:library
+LINK : warning LNK4217: 符号“__glewAttachShader”(在“ glew.lib(glew.obj)”中定义)已由“Shader.obj”(函数“"public: __cdecl Shader::Shader(unsigned int,char const *)" (??0Shader@@QEAA@IPEBD@Z)”中)导入
+LINK : warning LNK4217: 符号“__glewCompileShader”(在“ glew.lib(glew.obj)”中定义)已由“Shader.obj”(函数“"public: __cdecl Shader::Shader(unsigned int,char const *)" (??0Shader@@QEAA@IPEBD@Z)”中)导入
+LINK : warning LNK4217: 符号“__glewCreateProgram”(在“ glew.lib(glew.obj)”中定义)已由“Shader.obj”(函数“"public: __cdecl Shader::Shader(unsigned int,char const *)" (??0Shader@@QEAA@IPEBD@Z)”中)导入
+LINK : warning LNK4217: 符号“__glewCreateShader”(在“ glew.lib(glew.obj)”中定义)已由“Shader.obj”(函数“"public: __cdecl Shader::Shader(unsigned int,char const *)" (??0Shader@@QEAA@IPEBD@Z)”中)导入
+LINK : warning LNK4217: 符号“__glewDeleteShader”(在“ glew.lib(glew.obj)”中定义)已由“Shader.obj”(函数“"public: void __cdecl Shader::deleteShader(void)" (?deleteShader@Shader@@QEAAXXZ)”中)导入
+LINK : warning LNK4217: 符号“__glewGetProgramiv”(在“ glew.lib(glew.obj)”中定义)已由“Shader.obj”(函数“"public: __cdecl Shader::Shader(unsigned int,char const *)" (??0Shader@@QEAA@IPEBD@Z)”中)导入
+LINK : warning LNK4217: 符号“__glewGetShaderiv”(在“ glew.lib(glew.obj)”中定义)已由“Shader.obj”(函数“"public: __cdecl Shader::Shader(unsigned int,char const *)" (??0Shader@@QEAA@IPEBD@Z)”中)导入
+LINK : warning LNK4217: 符号“__glewLinkProgram”(在“ glew.lib(glew.obj)”中定义)已由“Shader.obj”(函数“"public: __cdecl Shader::Shader(unsigned int,char const *)" (??0Shader@@QEAA@IPEBD@Z)”中)导入
+LINK : warning LNK4217: 符号“__glewShaderSource”(在“ glew.lib(glew.obj)”中定义)已由“Shader.obj”(函数“"public: __cdecl Shader::Shader(unsigned int,char const *)" (??0Shader@@QEAA@IPEBD@Z)”中)导入
+glew.lib(glew.obj) : warning LNK4099: 未找到 PDB“vc110.pdb”(使用“glew.lib(glew.obj)”或在“C:\Users\luozi\Desktop\gitplace\CG-Homework\homework1\x64\Debug\vc110.pdb”中寻找)；正在链接对象，如同没有调试信息一样
   homework1.vcxproj -> C:\Users\luozi\Desktop\gitplace\CG-Homework\homework1\x64\Debug\homework1.exe

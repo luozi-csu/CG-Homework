@@ -145,9 +145,12 @@
     <ClCompile Include="Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="circle.frag" />
     <None Include="gradient.frag" />
     <None Include="packages.config" />
     <None Include="pure_color.frag" />
+    <None Include="stripe.frag" />
+    <None Include="trisection.frag" />
     <None Include="vertexSource.vert" />
   </ItemGroup>
   <ItemGroup>
