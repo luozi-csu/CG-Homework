@@ -166,15 +166,11 @@ int main()
 	// opengl status
 	glEnable(GL_DEPTH_TEST);
 
-	// view & transform & projection matrix
+	// view & model & projection matrix
 	glm::mat4 viewMatrix(1.0f);
-	viewMatrix = glm::translate(viewMatrix, glm::vec3(0, 0, -3.0f));
-	glm::mat4 transformMatrix(1.0f);
-	transformMatrix = glm::rotate(transformMatrix, glm::radians(60.0f), glm::vec3(1.0f, 1.0f, 1.0f));
-	glm::mat4 projectionMatrix = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.f);
-
 	glm::mat4 modelMatrix(1.0f);
-	modelMatrix = glm::translate(modelMatrix, glm::vec3(0, 0, -2.0f));
+	modelMatrix = glm::translate(modelMatrix, glm::vec3(0, 0, -3.0f));
+	glm::mat4 projectionMatrix = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.f);
 
 	while (!glfwWindowShouldClose(window)) {
 		// process input
@@ -195,7 +191,6 @@ int main()
 
 		// set view & transform & projection matrix
 		glUniformMatrix4fv(glGetUniformLocation(shader->ID, "view"), 1, GL_FALSE, glm::value_ptr(viewMatrix));
-		glUniformMatrix4fv(glGetUniformLocation(shader->ID, "transform"), 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0f)));
 		glUniformMatrix4fv(glGetUniformLocation(shader->ID, "projection"), 1, GL_FALSE, glm::value_ptr(projectionMatrix));
 		glUniformMatrix4fv(glGetUniformLocation(shader->ID, "model"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
 
