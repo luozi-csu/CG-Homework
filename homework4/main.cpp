@@ -28,10 +28,18 @@ float vertices[] = {
 	 0.75f,  0.75f,  0.0f,  3.0f,  3.0f,
 };
 
+float cameraZ = -3.0f;
+
 void processInput(GLFWwindow* window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, true);
+	}
+	else if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+		cameraZ += (float)glfwGetTime() * 0.02f;
+	}
+	else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+		cameraZ -= (float)glfwGetTime() * 0.02f;
 	}
 }
 
@@ -49,6 +57,19 @@ unsigned int loadImage(const char* filepath, GLint internalformat, GLenum format
 	// texture filtering
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	// texture mipmap
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 4);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	// use anisotropic filtering
+	// af parameter
+	float afLargest;
+	glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &afLargest);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, afLargest);
+
 	int width, height, nrChannels;
 	unsigned char* data = stbi_load(filepath, &width, &height, &nrChannels, 0);
 	if (data) {
@@ -70,7 +91,7 @@ int main()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	GLFWwindow* window = glfwCreateWindow(800, 600, "homework1", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(1600, 1200, "homework1", NULL, NULL);
 
 	if (window == NULL) {
 		std::cout << "create window failed" << std::endl;
@@ -93,7 +114,7 @@ int main()
 	}
 
 	// show window
-	glViewport(0, 0, 800, 600);
+	glViewport(0, 0, 1600, 1200);
 
 	// load model to VAO & VBO
 	unsigned int VAO;
@@ -103,8 +124,8 @@ int main()
 	unsigned int VBO;
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(flagVertices), flagVertices, GL_STATIC_DRAW); // draw national flag
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW); // draw jerry
+	glBufferData(GL_ARRAY_BUFFER, sizeof(flagVertices), flagVertices, GL_STATIC_DRAW); // draw national flag
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW); // draw jerry
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
@@ -119,9 +140,7 @@ int main()
 	unsigned int flagTexture = loadImage("flag.png", GL_RGB, GL_RGB);
 	unsigned int jerryTexture = loadImage("jerry.jpg", GL_RGB, GL_RGB);
 
-	// view matrix and projection matrix
-	glm::mat4 viewMatrix(1.0f);
-	viewMatrix = glm::translate(viewMatrix, glm::vec3(0, 0, -2.0f));
+	// projection matrix
 	glm::mat4 projectionMatrix = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 
 	while (!glfwWindowShouldClose(window)) {
@@ -145,6 +164,10 @@ int main()
 		glUniform1i(glGetUniformLocation(shader->ID, "jerryTexture"), 1);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, jerryTexture);
+
+		// create and process view matrix
+		glm::mat4 viewMatrix(1.0f);
+		viewMatrix = glm::translate(viewMatrix, glm::vec3(0, 0, cameraZ));
 
 		// set view matrix and projection matrix to shader program
 		glUniformMatrix4fv(glGetUniformLocation(shader->ID, "view"), 1, GL_FALSE, glm::value_ptr(viewMatrix));

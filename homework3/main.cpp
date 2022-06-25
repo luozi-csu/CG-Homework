@@ -9,7 +9,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "Shader.h"
 
-#define DRAW_VERTICES
+//#define DRAW_VERTICES
 #define DRAW_CUBE
 //#define ORTHO
 #define PERSPECTIVE
